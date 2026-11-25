@@ -566,8 +566,8 @@
       if (!currentModalItem || !currentSelectedOption) return;
       document.getElementById('modalSelectedPrice').textContent = currentSelectedOption.price;
       const msg = currentLang === 'mm'
-        ? `မင်္ဂလာပါ Billion Fragrance House ခင်ဗျာ —\n• ရေမွှေး: ${currentModalItem.brand} - ${currentModalItem.name}\n• အမျိုးအစား: ${currentModalItem.status}\n• Size: ${currentSelectedOption.label} (${currentSelectedOption.price})\nမှာယူလိုပါတယ်။`
-        : `Hello Billion Fragrance House —\n• Fragrance: ${currentModalItem.brand} - ${currentModalItem.name}\n• Status: ${currentModalItem.status}\n• Option: ${currentSelectedOption.label} (${currentSelectedOption.price})\nI would like to place an order.`;
+        ? `Hello Perfume မှာယူချင်လို့ပါ —\n• ရေမွှေး: ${currentModalItem.brand} - ${currentModalItem.name}\n• အမျိုးအစား: ${currentModalItem.status}\n• Size: ${currentSelectedOption.label} (${currentSelectedOption.price})\nမှာယူလိုပါတယ်။`
+        : `Hello Perfume မှာယူချင်လို့ပါ —\n• Fragrance: ${currentModalItem.brand} - ${currentModalItem.name}\n• Status: ${currentModalItem.status}\n• Option: ${currentSelectedOption.label} (${currentSelectedOption.price})\nI would like to place an order.`;
       document.getElementById('modalOrderBtn').href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(msg)}`;
     }
 
