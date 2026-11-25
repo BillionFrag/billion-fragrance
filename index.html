@@ -252,7 +252,7 @@
               <span class="text-xs text-zinc-400" data-i18n="selectedPriceLabel">Selected Price</span>
               <span id="modalSelectedPrice" class="text-lg font-bold text-gold-champagne"></span>
             </div>
-            <a id="modalOrderBtn" href="https://t.me/burmesejuli" target="_blank" rel="noopener"
+            <a id="modalOrderBtn" onclick="handleOrderClick()" href="https://t.me/burmesejuli" target="_blank" rel="noopener"
                class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-crimson to-crimson-bright hover:from-crimson-bright hover:to-crimson text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg border border-gold/30 transition">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.17.326.016.094.036.308.02.475z"/>
@@ -267,13 +267,19 @@
 
   <script>
     const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQXlrNGDe7Sca5Mym0_gGKk78hagqNW9ynjPT_u9vHXvebOWbLZr7xyMY1uP3rLkgGctpwqg0Dvizon/pub?output=csv";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDgub1JN3qKMEwakffJD-WNZ8IdBCtTnCHLP-teBYz7b7rd4SBdULk_qkFUnR_gEe_Rg/exec";
     const TELEGRAM_USERNAME = "burmesejuli";
 
-    // Non-price metadata columns in Google Sheet
+    // Auto-Popular thresholds
+    const TODAY_POPULAR_MIN = 5;
+    const MONTHLY_POPULAR_MIN = 10;
+
+    // Non-price metadata & tracking columns in Google Sheet
     const METADATA_COLS = new Set([
       'no', 'id', 'sr', 'sku', 'code', 'brand', 'name', 'status',
       'family', 'category', 'gender', 'concentration', 'notes',
-      'image_url', 'image', 'popular', 'description', 'desc', 'remark', 'remarks'
+      'image_url', 'image', 'popular', 'today_clicks', 'monthly_clicks',
+      'last_updated', 'description', 'desc', 'remark', 'remarks'
     ]);
 
     const FALLBACK_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(`
@@ -347,6 +353,17 @@
     let currentModalItem = null;
     let currentModalOptions = [];
     let currentSelectedOption = null;
+
+    function getYangonTodayStr() {
+      // Asia/Yangon is UTC+6:30 (+390 minutes)
+      const now = new Date();
+      const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const yangonDate = new Date(utcMs + (390 * 60000));
+      const yyyy = yangonDate.getUTCFullYear();
+      const mm = String(yangonDate.getUTCMonth() + 1).padStart(2, '0');
+      const dd = String(yangonDate.getUTCDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
 
     function setLanguage(lang) {
       currentLang = lang;
@@ -514,16 +531,65 @@
       }
       section.classList.remove('hidden');
 
-      const tagged = allFragrances.filter(item => {
-        const p = (item.popular || '').toLowerCase();
-        if (activePopularTab === 'today') return p.includes('today');
-        return p.includes('month');
-      });
+      if (activePopularTab === 'today') {
+        const qualifiedToday = allFragrances
+          .filter(item => item.today_clicks >= TODAY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('today'))
+          .sort((a, b) => b.today_clicks - a.today_clicks);
 
-      const listToShow = tagged.length > 0 ? tagged : allFragrances.slice(0, 4);
-      const badgeLabel = activePopularTab === 'today' ? '🔥 TODAY TOP' : '👑 MONTHLY TOP';
+        if (qualifiedToday.length > 0) {
+          grid.innerHTML = qualifiedToday.map(item => {
+            const label = item.today_clicks >= TODAY_POPULAR_MIN
+              ? `🔥 TODAY TOP • ${item.today_clicks}`
+              : '🔥 TODAY TOP';
+            return createProductCardHTML(item, label);
+          }).join('');
+        } else {
+          const fallbackToday = [...allFragrances]
+            .sort((a, b) => b.today_clicks - a.today_clicks)
+            .slice(0, 4);
+          grid.innerHTML = fallbackToday.map(item => createProductCardHTML(item, '✨ FEATURED')).join('');
+        }
+      } else {
+        const qualifiedMonthly = allFragrances
+          .filter(item => item.monthly_clicks >= MONTHLY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('month'))
+          .sort((a, b) => b.monthly_clicks - a.monthly_clicks);
 
-      grid.innerHTML = listToShow.map(item => createProductCardHTML(item, badgeLabel)).join('');
+        if (qualifiedMonthly.length > 0) {
+          grid.innerHTML = qualifiedMonthly.map(item => {
+            const label = item.monthly_clicks >= MONTHLY_POPULAR_MIN
+              ? `👑 MONTHLY TOP • ${item.monthly_clicks}`
+              : '👑 MONTHLY TOP';
+            return createProductCardHTML(item, label);
+          }).join('');
+        } else {
+          const fallbackMonthly = [...allFragrances]
+            .sort((a, b) => b.monthly_clicks - a.monthly_clicks)
+            .slice(0, 4);
+          grid.innerHTML = fallbackMonthly.map(item => createProductCardHTML(item, '✨ FEATURED')).join('');
+        }
+      }
+    }
+
+    function handleOrderClick() {
+      if (!currentModalItem || !APPS_SCRIPT_URL) return;
+
+      // Prevent duplicate spam clicks from the same browser within 1 hour
+      const storageKey = `bfh_track_${currentModalItem.brand}_${currentModalItem.name}`.toLowerCase().replace(/\s+/g, '_');
+      const now = Date.now();
+      const lastTracked = Number(localStorage.getItem(storageKey) || 0);
+      if (now - lastTracked < 3600000) {
+        return;
+      }
+      localStorage.setItem(storageKey, String(now));
+
+      // Update local state immediately for instant UI feedback
+      currentModalItem.today_clicks += 1;
+      currentModalItem.monthly_clicks += 1;
+      renderPopular();
+
+      // Send click event to Google Apps Script in background
+      const trackUrl = `${APPS_SCRIPT_URL}?brand=${encodeURIComponent(currentModalItem.brand)}&name=${encodeURIComponent(currentModalItem.name)}&t=${now}`;
+      fetch(trackUrl, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
     }
 
     async function loadCatalog() {
@@ -545,6 +611,9 @@
           }
         });
 
+        const todayStr = getYangonTodayStr();
+        const monthStr = todayStr.slice(0, 7);
+
         allFragrances = rows.slice(1)
           .filter(r => r[idx('name')] || r[idx('brand')])
           .map((r, index) => {
@@ -565,6 +634,18 @@
               }
             });
 
+            // Read & validate daily/monthly click counts against Yangon date
+            const rawUpdated = (idx('last_updated') !== -1 ? r[idx('last_updated')] : '').trim();
+            let tClicks = idx('today_clicks') !== -1 ? (Number(r[idx('today_clicks')]) || 0) : 0;
+            let mClicks = idx('monthly_clicks') !== -1 ? (Number(r[idx('monthly_clicks')]) || 0) : 0;
+
+            if (rawUpdated && rawUpdated !== todayStr) {
+              tClicks = 0;
+              if (rawUpdated.slice(0, 7) !== monthStr) {
+                mClicks = 0;
+              }
+            }
+
             return {
               id: index,
               brand: r[idx('brand')] || 'Luxury House',
@@ -574,7 +655,9 @@
               notes: r[idx('notes')] || '',
               options: options,
               image_url: r[idx('image_url')] || (idx('image') !== -1 ? r[idx('image')] : '') || '',
-              popular: (idx('popular') !== -1 ? r[idx('popular')] : '') || ''
+              popular: (idx('popular') !== -1 ? r[idx('popular')] : '') || '',
+              today_clicks: tClicks,
+              monthly_clicks: mClicks
             };
           });
 
