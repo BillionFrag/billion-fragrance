@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -31,17 +31,34 @@
           },
           fontFamily: {
             serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-            sans: ['"Plus Jakarta Sans"', '"Noto Sans Myanmar"', 'sans-serif']
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Myanmar"', 'sans-serif'],
+            roundhand: ['"Roundhand Bd BT"', '"Alex Brush"', 'cursive']
           }
         }
       }
     }
   </script>
   <style>
+    @font-face {
+      font-family: 'Roundhand Bd BT';
+      src: local('Roundhand Bd BT'),
+           local('RoundhandBdBT'),
+           url('roundhand.ttf') format('truetype'),
+           url('roundhand.otf') format('opentype'),
+           url('fonts/roundhand.ttf') format('truetype'),
+           url('fonts/roundhand.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
     body {
       background-color: #09090B;
       color: #F4F4F5;
       font-family: 'Plus Jakarta Sans', 'Noto Sans Myanmar', sans-serif;
+    }
+    .brand-script-title {
+      font-family: 'Roundhand Bd BT', 'Alex Brush', cursive;
+      letter-spacing: 0.01em;
     }
     .gold-border {
       border: 1px solid rgba(212, 175, 55, 0.28);
@@ -66,7 +83,7 @@
     <span data-i18n="topBanner">100% Authentic Niche & Designer Fragrances • In-Stock, Decants & Pre-Order</span>
   </div>
 
-  <!-- Sticky Header with Large Logo & Antique Gold Full Title -->
+  <!-- Sticky Header with Large Logo & Roundhand Bd BT Title -->
   <header class="sticky top-0 z-40 bg-obsidian/95 backdrop-blur-md border-b border-gold/25">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-wrap md:flex-nowrap items-center justify-between gap-4">
       <!-- Brand Logo & Full Title -->
@@ -75,7 +92,7 @@
              alt="Billion Fragrance House"
              class="h-[105px] sm:h-[145px] md:h-[160px] w-auto rounded-xl object-contain border border-gold/50 shadow-xl bg-black" />
         <div>
-          <h1 class="font-serif text-2xl sm:text-4xl md:text-5xl font-bold tracking-wide text-white leading-tight">
+          <h1 class="brand-script-title text-3xl sm:text-5xl md:text-6xl font-normal text-white leading-tight">
             <span class="text-[#D4AF37]">Billion</span> Fragrance House
           </h1>
           <p class="text-[11px] sm:text-xs tracking-[0.22em] text-gold-champagne/80 uppercase mt-1" data-i18n="brandSub">
@@ -355,7 +372,6 @@
     let currentSelectedOption = null;
 
     function getYangonTodayStr() {
-      // Asia/Yangon is UTC+6:30 (+390 minutes)
       const now = new Date();
       const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
       const yangonDate = new Date(utcMs + (390 * 60000));
@@ -573,7 +589,6 @@
     function handleOrderClick() {
       if (!currentModalItem || !APPS_SCRIPT_URL) return;
 
-      // Prevent duplicate spam clicks from the same browser within 1 hour
       const storageKey = `bfh_track_${currentModalItem.brand}_${currentModalItem.name}`.toLowerCase().replace(/\s+/g, '_');
       const now = Date.now();
       const lastTracked = Number(localStorage.getItem(storageKey) || 0);
@@ -582,12 +597,10 @@
       }
       localStorage.setItem(storageKey, String(now));
 
-      // Update local state immediately for instant UI feedback
       currentModalItem.today_clicks += 1;
       currentModalItem.monthly_clicks += 1;
       renderPopular();
 
-      // Send click event to Google Apps Script in background
       const trackUrl = `${APPS_SCRIPT_URL}?brand=${encodeURIComponent(currentModalItem.brand)}&name=${encodeURIComponent(currentModalItem.name)}&t=${now}`;
       fetch(trackUrl, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
     }
@@ -634,7 +647,6 @@
               }
             });
 
-            // Read & validate daily/monthly click counts against Yangon date
             const rawUpdated = (idx('last_updated') !== -1 ? r[idx('last_updated')] : '').trim();
             let tClicks = idx('today_clicks') !== -1 ? (Number(r[idx('today_clicks')]) || 0) : 0;
             let mClicks = idx('monthly_clicks') !== -1 ? (Number(r[idx('monthly_clicks')]) || 0) : 0;
