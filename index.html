@@ -58,7 +58,7 @@
     }
     .brand-script-title {
       font-family: 'Roundhand Bd BT', 'Alex Brush', cursive;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.015em;
     }
     .gold-border {
       border: 1px solid rgba(212, 175, 55, 0.28);
@@ -83,26 +83,30 @@
     <span data-i18n="topBanner">100% Authentic Niche & Designer Fragrances • In-Stock, Decants & Pre-Order</span>
   </div>
 
-  <!-- Sticky Header with Large Logo & Roundhand Bd BT Title -->
+  <!-- Sticky Header with Left Logo, Centered Title & Non-Overlapping Subtitle -->
   <header class="sticky top-0 z-40 bg-obsidian/95 backdrop-blur-md border-b border-gold/25">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-wrap md:flex-nowrap items-center justify-between gap-4">
-      <!-- Brand Logo & Full Title -->
-      <a href="#" class="flex items-center gap-3.5 sm:gap-5 group">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-5 grid grid-cols-2 md:grid-cols-[auto_1fr_auto] items-center gap-y-3 gap-x-4">
+      <!-- Left: Brand Logo -->
+      <a href="#" class="justify-self-start flex items-center group">
         <img src="images/Billion%20Pod%20Mart(%20Black%20-%20Gold%20Leather)%20copy.jpg"
              alt="Billion Fragrance House"
-             class="h-[105px] sm:h-[145px] md:h-[160px] w-auto rounded-xl object-contain border border-gold/50 shadow-xl bg-black" />
-        <div>
-          <h1 class="brand-script-title text-3xl sm:text-5xl md:text-6xl font-normal text-white leading-tight">
-            <span class="text-[#D4AF37]">Billion</span> Fragrance House
-          </h1>
-          <p class="text-[11px] sm:text-xs tracking-[0.22em] text-gold-champagne/80 uppercase mt-1" data-i18n="brandSub">
-            Luxury Perfumes • Decants • Pre-Order
-          </p>
-        </div>
+             class="h-[95px] sm:h-[135px] md:h-[155px] w-auto rounded-xl object-contain border border-gold/50 shadow-xl bg-black" />
       </a>
 
+      <!-- Center: Centered Title & Spaced Subtitle -->
+      <div class="col-span-2 md:col-span-1 order-3 md:order-2 text-center px-2">
+        <a href="#" class="inline-block group">
+          <h1 class="brand-script-title text-4xl sm:text-5xl md:text-6xl font-normal text-white leading-[1.35] sm:leading-[1.4] pb-1">
+            <span class="text-[#D4AF37]">Billion</span> Fragrance House
+          </h1>
+        </a>
+        <p class="block text-[11px] sm:text-xs tracking-[0.22em] text-gold-champagne/85 uppercase mt-3 sm:mt-4" data-i18n="brandSub">
+          Luxury Perfumes • Decants • Pre-Order
+        </p>
+      </div>
+
       <!-- Right Controls: Language Switcher & Direct Telegram -->
-      <div class="flex items-center gap-2.5 sm:gap-3 ml-auto">
+      <div class="order-2 md:order-3 justify-self-end flex items-center gap-2 sm:gap-3">
         <div class="flex items-center bg-obsidian-elevated rounded-full p-1 border border-gold/30 text-xs font-medium">
           <button id="btn-en" onclick="setLanguage('en')" class="px-3 py-1 rounded-full bg-gold text-obsidian font-semibold transition">
             EN
@@ -113,7 +117,7 @@
         </div>
 
         <a href="https://t.me/burmesejuli" target="_blank" rel="noopener"
-           class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-crimson hover:bg-crimson-bright text-white text-xs font-semibold tracking-wide border border-gold/35 shadow-md transition">
+           class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-crimson hover:bg-crimson-bright text-white text-xs font-semibold tracking-wide border border-gold/35 shadow-md transition whitespace-nowrap">
           <span data-i18n="contactAdmin">Telegram Admin</span>
         </a>
       </div>
