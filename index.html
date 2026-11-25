@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billion Fragrance House | Niche & Designer Perfumery</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Luxury Serif), Plus Jakarta Sans (Clean UI), Noto Sans Myanmar -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Dark Luxury Palette & Typography -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              DEFAULT: '#09090B',
+              surface: '#111114',
+              elevated: '#18181D'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              champagne: '#F3E5AB',
+              muted: '#9A7D2A'
+            },
+            crimson: {
+              DEFAULT: '#9B111E',
+              bright: '#DC2626',
+              deep: '#5E0911'
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Myanmar"', 'sans-serif']
+          },
+          boxShadow: {
+            'gold-glow': '0 0 32px -8px rgba(212, 175, 55, 0.28)',
+            'crimson-glow': '0 0 36px -8px rgba(220, 38, 38, 0.42)'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="bg-obsidian text-zinc-100 font-sans antialiased selection:bg-crimson selection:text-gold-champagne overflow-x-hidden">
+
+  <!-- Ambient Atmospheric Lighting -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-36 -left-28 w-96 h-96 rounded-full bg-crimson/15 blur-3xl"></div>
+    <div class="absolute top-1/3 -right-32 w-96 h-96 rounded-full bg-gold/10 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-crimson-deep/20 blur-3xl"></div>
+  </div>
+
+  <!-- ================= STICKY BOUTIQUE HEADER ================= -->
+  <header class="sticky top-0 z-40 bg-obsidian/85 backdrop-blur-xl border-b border-gold/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+
+      <!-- =====================================================================
+           BRAND LOGO SECTION
+           How to use your own Logo image (PNG/SVG):
+           1. Put your logo file inside the GitHub "images" folder (e.g. images/logo.png)
+           2. Uncomment the <img> tag below and delete/comment out the Monogram <div>.
+           ===================================================================== -->
+      <a href="#top" class="flex items-center gap-3 group focus:outline-none">
+        <!-- OPTION A: Custom Logo Image (Uncomment line below when ready) -->
+        <!-- <img src="images/logo.png" alt="Billion Fragrance House" class="h-11 w-auto object-contain" /> -->
+
+        <!-- OPTION B: Built-in Luxury Monogram Emblem -->
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-gold/25 via-obsidian-surface to-crimson/35 border border-gold/45 flex items-center justify-center shadow-gold-glow group-hover:border-gold-champagne transition-colors">
+          <span class="font-serif text-xl sm:text-2xl font-bold text-gold-champagne tracking-wider">B</span>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="font-serif text-lg sm:text-xl font-bold tracking-[0.22em] text-gold-champagne leading-none">
+            BILLION
+          </span>
+          <span class="text-[9px] sm:text-[10px] tracking-[0.26em] text-zinc-400 uppercase mt-1">
+            Fragrance House
+          </span>
+        </div>
+      </a>
+
+      <!-- Right Controls: Language Toggle (EN | MM) + Direct Telegram Concierge -->
+      <div class="flex items-center gap-2.5 sm:gap-4">
+        <!-- Bilingual Switcher -->
+        <div class="inline-flex items-center bg-obsidian-surface border border-gold/30 rounded-full p-1" role="group" aria-label="Language Switcher">
+          <button
+            id="btn-lang-en"
+            onclick="setLanguage('en')"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 bg-gold text-obsidian"
+          >
+            EN
+          </button>
+          <button
+            id="btn-lang-mm"
+            onclick="setLanguage('mm')"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 text-zinc-400 hover:text-zinc-100"
+          >
+            MM
+          </button>
+        </div>
+
+        <!-- Direct Telegram Concierge CTA -->
+        <a
+          href="https://t.me/burmesejuli"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3.5 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-crimson to-crimson-bright hover:from-gold hover:to-gold-champagne text-white hover:text-obsidian border border-gold/35 text-xs sm:text-sm font-medium transition-all duration-300 shadow-crimson-glow"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          <span class="hidden sm:inline" data-i18n="nav_concierge">Telegram Concierge</span>
+          <span class="sm:hidden" data-i18n="nav_order_short">Order</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main id="top" class="relative z-10">
+
+    <!-- ================= EDITORIAL HERO BANNER ================= -->
+    <section class="relative pt-12 pb-12 sm:pt-20 sm:pb-16 px-4 sm:px-6 lg:px-8 border-b border-gold/15">
+      <div class="max-w-5xl mx-auto text-center">
+        <!-- Eyebrow Pill -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-obsidian-surface/95 border border-gold/30 mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-crimson-bright animate-pulse"></span>
+          <span class="text-[11px] sm:text-xs font-medium tracking-[0.2em] uppercase text-gold-champagne" data-i18n="hero_badge">
+            Authentic Niche & Designer Perfumery
+          </span>
+        </div>
+
+        <!-- Luxury Serif Display Headline -->
+        <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.12] mb-5">
+          <span data-i18n="hero_title_1">Curated Luxury</span>
+          <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-champagne to-amber-200" data-i18n="hero_title_2">
+            Signature Scents
+          </span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="max-w-2xl mx-auto text-sm sm:text-base text-zinc-400 leading-relaxed mb-9" data-i18n="hero_subtitle">
+          Explore 100% authentic In-Stock Full Bottles, precision-poured Decants (2ml, 5ml, 10ml), and bespoke Pre-Orders delivered across Myanmar.
+        </p>
+
+        <!-- Quick Category Jump Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12">
+          <button
+            onclick="quickFilter('In-Stock')"
+            class="px-6 py-3.5 rounded-full bg-gradient-to-r from-gold to-gold-champagne text-obsidian font-semibold text-xs sm:text-sm tracking-wide hover:scale-[1.02] transition-all shadow-gold-glow"
+            data-i18n="hero_cta_instock"
+          >
+            In-Stock Full Size
+          </button>
+          <button
+            onclick="quickFilter('Decants')"
+            class="px-6 py-3.5 rounded-full bg-obsidian-surface text-gold-champagne border border-gold/40 hover:border-gold hover:bg-gold/10 font-medium text-xs sm:text-sm tracking-wide transition-all"
+            data-i18n="hero_cta_decants"
+          >
+            Shop Decants
+          </button>
+          <button
+            onclick="quickFilter('Pre-Order')"
+            class="px-6 py-3.5 rounded-full bg-crimson/25 text-red-200 border border-crimson-bright/60 hover:bg-crimson hover:text-white font-medium text-xs sm:text-sm tracking-wide transition-all"
+            data-i18n="hero_cta_preorder"
+          >
+            Pre-Order Vault
+          </button>
+        </div>
+
+        <!-- Boutique Guarantees -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
+          <div class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl bg-obsidian-surface/80 border border-gold/15">
+            <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+            <span class="text-xs text-zinc-300 font-medium" data-i18n="trust_authentic">100% Authentic Guaranteed</span>
+          </div>
+          <div class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl bg-obsidian-surface/80 border border-gold/15">
+            <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+            <span class="text-xs text-zinc-300 font-medium" data-i18n="trust_decants">Hygienic Glass Atomizers</span>
+          </div>
+          <div class="flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl bg-obsidian-surface/80 border border-gold/15">
+            <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+            </svg>
+            <span class="text-xs text-zinc-300 font-medium" data-i18n="trust_delivery">YGN / MDY COD & Nationwide</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SHOWROOM CATALOG & FILTERS ================= -->
+    <section id="showroom" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <!-- Catalog Header -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
+        <div>
+          <p class="text-xs uppercase tracking-[0.25em] text-gold mb-1.5" data-i18n="catalog_eyebrow">
+            Private Collection
+          </p>
+          <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white" data-i18n="catalog_title">
+            Fragrance Showroom
+          </h2>
+        </div>
+        <p id="results-count" class="text-xs sm:text-sm text-zinc-400">
+          Showing 6 fragrances
+        </p>
+      </div>
+
+      <!-- Search & Multi-Filter Controls -->
+      <div class="bg-obsidian-surface/95 border border-gold/20 rounded-3xl p-4 sm:p-6 mb-10 space-y-5 shadow-2xl">
+        <!-- Row 1: Real-time Search + Status Filter Tabs -->
+        <div class="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+          <!-- Search Bar -->
+          <div class="relative flex-1 max-w-xl">
+            <svg class="w-5 h-5 text-gold/70 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input
+              id="search-input"
+              type="text"
+              oninput="handleSearch(this.value)"
+              placeholder="Search brand, perfume, or notes (e.g. Pineapple, Vanilla, Saffron)..."
+              data-i18n-placeholder="search_placeholder"
+              class="w-full pl-12 pr-10 py-3 rounded-2xl bg-obsidian border border-gold/25 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-gold transition-colors"
+            />
+            <button
+              id="clear-search-btn"
+              onclick="clearSearch()"
+              class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-zinc-400 hover:text-gold transition-colors"
+              aria-label="Clear search"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Status Tabs: All | In-Stock | Decants | Pre-Order -->
+          <div id="status-tabs" class="flex flex-wrap gap-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Subtle Divider -->
+        <div class="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent"></div>
+
+        <!-- Row 2: Scent Family Chips -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <span class="text-xs uppercase tracking-[0.2em] text-zinc-400 shrink-0" data-i18n="scent_family_label">
+            Scent Family:
+          </span>
+          <div id="family-chips" class="flex flex-wrap gap-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Showroom Grid -->
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Cards injected dynamically -->
+      </div>
+
+      <!-- Empty Search / Filter State -->
+      <div id="empty-state" class="hidden text-center py-20 px-4 bg-obsidian-surface/70 border border-gold/15 rounded-3xl">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-crimson/20 border border-crimson/45 flex items-center justify-center text-gold">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </div>
+        <h3 class="font-serif text-2xl text-white mb-2" data-i18n="empty_title">No Fragrances Found</h3>
+        <p class="text-sm text-zinc-400 mb-6 max-w-md mx-auto" data-i18n="empty_subtitle">
+          No matching perfumes found. Reset filters or message us directly on Telegram to request a bespoke pre-order.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <button
+            onclick="resetFilters()"
+            class="px-5 py-2.5 rounded-full bg-gold text-obsidian text-xs font-semibold tracking-wide hover:bg-gold-champagne transition-colors"
+            data-i18n="btn_reset_filters"
+          >
+            Reset All Filters
+          </button>
+          <a
+            href="https://t.me/burmesejuli"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-5 py-2.5 rounded-full bg-crimson text-white text-xs font-semibold tracking-wide hover:bg-crimson-bright transition-colors"
+            data-i18n="btn_request_preorder"
+          >
+            Request Pre-Order on Telegram
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONCIERGE & DELIVERY POLICY ================= -->
+    <section class="border-t border-gold/15 bg-obsidian-surface/50 py-14 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="rounded-3xl bg-gradient-to-r from-crimson-deep/40 via-obsidian-surface to-gold/10 border border-gold/25 p-6 sm:p-9 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div class="space-y-2.5">
+            <div class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-gold-champagne font-semibold">
+              <span class="w-2 h-2 rounded-full bg-crimson-bright"></span>
+              <span data-i18n="delivery_badge">Yangon & Mandalay COD • Nationwide Express Delivery</span>
+            </div>
+            <p class="text-sm sm:text-base text-zinc-200 max-w-2xl leading-relaxed" data-i18n="delivery_desc">
+              Cash on Delivery (COD) available across Yangon & Mandalay. Fast Highway Express Cargo delivery to all other cities in Myanmar. Pre-orders arrive within 2–3 weeks upon deposit confirmation.
+            </p>
+          </div>
+          <a
+            href="https://t.me/burmesejuli"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="shrink-0 inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-gold hover:bg-gold-champagne text-obsidian font-semibold text-sm transition-all shadow-gold-glow"
+          >
+            <span data-i18n="delivery_cta">Order via @burmesejuli</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="relative z-10 border-t border-gold/15 bg-obsidian py
