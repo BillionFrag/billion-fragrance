@@ -53,7 +53,6 @@
     }
     body {
       background-color: #09090B;
-      /* Adds overlay so background image pattern doesn't distract from text */
       background-image: linear-gradient(rgba(9, 9, 11, 0.88), rgba(9, 9, 11, 0.94)), url('images/marble-bg.jpg'), url('marble-bg.jpg');
       background-size: cover;
       background-attachment: fixed;
@@ -88,8 +87,8 @@
     <span data-i18n="topBanner">100% Authentic Niche & Designer Fragrances • In-Stock, Decants & Pre-Order</span>
   </div>
 
-  <!-- Sticky Header with Left Logo, Centered Title & Non-Overlapping Subtitle -->
-  <header class="sticky top-0 z-40 bg-obsidian/95 backdrop-blur-md border-b border-gold/25">
+  <!-- Non-Sticky Header (Scrolls away naturally so mobile screen stays clear) -->
+  <header class="relative z-30 bg-obsidian/90 backdrop-blur-md border-b border-gold/25">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-5 grid grid-cols-2 md:grid-cols-[auto_1fr_auto] items-center gap-y-3 gap-x-4">
       <!-- Left: Brand Logo -->
       <a href="#" class="justify-self-start flex items-center group">
@@ -414,10 +413,10 @@
     function setPopularTab(tab) {
       activePopularTab = tab;
       document.getElementById('pop-today').className = tab === 'today'
-        ? 'px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-crimson to-crimson-bright text-white border border-gold/40 shadow transition font-semibold'
+        ? 'px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-crimson to-crimson-bright text-white border border-gold/40 shadow transition'
         : 'px-4 py-1.5 rounded-full text-xs font-medium text-zinc-300 hover:text-gold-champagne transition';
       document.getElementById('pop-monthly').className = tab === 'monthly'
-        ? 'px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-crimson to-crimson-bright text-white border border-gold/40 shadow transition font-semibold'
+        ? 'px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-crimson to-crimson-bright text-white border border-gold/40 shadow transition'
         : 'px-4 py-1.5 rounded-full text-xs font-medium text-zinc-300 hover:text-gold-champagne transition';
       renderPopular();
     }
