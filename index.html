@@ -55,10 +55,16 @@
       background-color: #09090B;
       background-image: linear-gradient(rgba(9, 9, 11, 0.88), rgba(9, 9, 11, 0.94)), url('images/marble-bg.jpg'), url('marble-bg.jpg');
       background-size: cover;
-      background-attachment: fixed;
-      background-position: center;
+      background-attachment: scroll;
+      background-position: center top;
       color: #F4F4F5;
       font-family: 'Plus Jakarta Sans', 'Noto Sans Myanmar', sans-serif;
+    }
+    @media (min-width: 768px) {
+      body {
+        background-attachment: fixed;
+        background-position: center;
+      }
     }
     .brand-script-title {
       font-family: 'Roundhand Bd BT', 'Alex Brush', cursive;
@@ -78,6 +84,15 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+    @keyframes shimmerSweep {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .img-skeleton {
+      background: linear-gradient(90deg, #111114 25%, #231f16 50%, #111114 75%);
+      background-size: 200% 100%;
+      animation: shimmerSweep 1.6s infinite linear;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-crimson selection:text-white">
@@ -93,6 +108,8 @@
       <!-- Left: Brand Logo -->
       <a href="#" class="justify-self-start flex items-center group">
         <img src="images/Billion%20Pod%20Mart(%20Black%20-%20Gold%20Leather)%20copy.jpg"
+             fetchpriority="high"
+             decoding="async"
              alt="Billion Fragrance House"
              class="h-[95px] sm:h-[135px] md:h-[155px] w-auto rounded-xl object-contain border border-gold/50 shadow-xl bg-black" />
       </a>
@@ -141,7 +158,7 @@
         Explore ready-to-ship full bottles, hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.
       </p>
 
-      <!-- VIP Telegram Channel Card (Left: Pre-Order Special Offers & Daily Updates + Link | Right: Full Poster QR) -->
+      <!-- VIP Telegram Channel Card -->
       <div class="max-w-3xl mx-auto mt-7 p-4 sm:p-5 rounded-2xl bg-obsidian-surface/85 backdrop-blur-md border border-gold/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 text-center sm:text-left">
         <div class="flex-1">
           <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] bg-gold/15 text-gold border border-gold/35 mb-2" data-i18n="channelVipBadge">
@@ -169,6 +186,8 @@
         <a href="https://t.me/debillionaires" target="_blank" rel="noopener" title="Scan or Tap to join @debillionaires"
            class="shrink-0 block overflow-hidden rounded-xl border-2 border-gold/80 shadow-2xl bg-black hover:scale-[1.03] transition">
           <img src="images/channel-qr.jpg"
+               fetchpriority="high"
+               decoding="async"
                onerror="if(!this.dataset.step){this.dataset.step='1';this.src='image/channel-qr.jpg';}else if(this.dataset.step==='1'){this.dataset.step='2';this.src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https%3A%2F%2Ft.me%2Fdebillionaires';}"
                alt="Billion Fragrance House Telegram Channel QR"
                class="w-44 sm:w-48 md:w-52 h-auto object-contain block" />
@@ -263,6 +282,8 @@
       <a href="https://t.me/debillionaires" target="_blank" rel="noopener"
          class="shrink-0 block overflow-hidden rounded-xl border-2 border-gold/80 shadow-xl bg-black hover:scale-[1.03] transition">
         <img src="images/channel-qr.jpg"
+             loading="lazy"
+             decoding="async"
              onerror="if(!this.dataset.step){this.dataset.step='1';this.src='image/channel-qr.jpg';}else if(this.dataset.step==='1'){this.dataset.step='2';this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Ft.me%2Fdebillionaires';}"
              alt="Pre-Order Channel QR"
              class="w-40 sm:w-44 h-auto object-contain block" />
@@ -325,15 +346,22 @@
     </div>
   </footer>
 
-  <!-- Showroom Detail Modal -->
-  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+  <!-- Showroom Detail Modal (With Sticky Back/Close Header & History Swipe-Back Support) -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-2.5 sm:p-4">
     <div class="bg-obsidian-surface gold-border rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[92vh] flex flex-col">
-      <!-- Close Button -->
-      <button onclick="closeModal()" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-obsidian/90 text-zinc-300 hover:text-white border border-gold/40 flex items-center justify-center">
-        ✕
-      </button>
+      <!-- Sticky Top Navigation Bar (Always visible while scrolling) -->
+      <div class="sticky top-0 z-20 flex items-center justify-between px-4 py-2.5 bg-obsidian/95 backdrop-blur-md border-b border-gold/25 shrink-0">
+        <button onclick="closeModal()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-obsidian-elevated hover:bg-gold/20 text-gold-champagne text-xs sm:text-sm font-semibold border border-gold/40 transition active:scale-95">
+          <span>←</span>
+          <span data-i18n="modalBackBtn">Back</span>
+        </button>
 
-      <div class="overflow-y-auto grid grid-cols-1 md:grid-cols-2">
+        <button onclick="closeModal()" aria-label="Close" class="w-10 h-10 rounded-full bg-crimson/25 hover:bg-crimson text-white text-base font-bold border border-gold/50 flex items-center justify-center shadow-md transition active:scale-95">
+          ✕
+        </button>
+      </div>
+
+      <div id="modalScrollBody" class="overflow-y-auto grid grid-cols-1 md:grid-cols-2 pb-6 sm:pb-4">
         <!-- Full Uncropped Product Image -->
         <div class="bg-black flex items-center justify-center relative p-2">
           <img id="modalImage" src="" alt="" class="w-full h-auto max-h-[420px] object-contain rounded-lg" />
@@ -367,7 +395,7 @@
               <span id="modalSelectedPrice" class="text-lg font-bold text-gold-champagne"></span>
             </div>
             <a id="modalOrderBtn" onclick="handleOrderClick()" href="https://t.me/burmesejuli" target="_blank" rel="noopener"
-               class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-crimson to-crimson-bright hover:from-crimson-bright hover:to-crimson text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg border border-gold/30 transition">
+               class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-crimson to-crimson-bright hover:from-crimson-bright hover:to-crimson text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg border border-gold/30 transition">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.17.326.016.094.036.308.02.475z"/>
               </svg>
@@ -434,6 +462,7 @@
         noResultsTitle: "No fragrances found",
         noResultsSub: "Try clearing your search or switching category filters.",
         footerTagline: "Authentic Perfumes & Hand-Decanted Samples",
+        modalBackBtn: "Back",
         notesLabel: "Key Scent Notes",
         selectSizeLabel: "Select Size / Option",
         selectedPriceLabel: "Selected Price",
@@ -467,6 +496,7 @@
         noResultsTitle: "ရေမွှေး ရှာမတွေ့ပါ",
         noResultsSub: "ရှာဖွေမှု စာသားကို ပြန်ပြင်ကြည့်ပါ သို့မဟုတ် အမျိုးအစား ပြောင်းရွေးကြည့်ပါ။",
         footerTagline: "စစ်မှန်သော ရေမွှေးနှင့် Decant များ ရောင်းဝယ်ရေး",
+        modalBackBtn: "နောက်သို့",
         notesLabel: "ပါဝင်သော ရနံ့များ (Notes)",
         selectSizeLabel: "Size ရွေးချယ်ပါ",
         selectedPriceLabel: "ကျသင့်ငွေ",
@@ -483,6 +513,7 @@
     let currentModalItem = null;
     let currentModalOptions = [];
     let currentSelectedOption = null;
+    let savedScrollPosition = 0;
 
     function getYangonTodayStr() {
       const now = new Date();
@@ -492,6 +523,16 @@
       const mm = String(yangonDate.getUTCMonth() + 1).padStart(2, '0');
       const dd = String(yangonDate.getUTCDate()).padStart(2, '0');
       return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function normalizeImageUrl(rawUrl) {
+      if (!rawUrl) return '';
+      const url = rawUrl.trim();
+      const driveMatch = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        return `https://lh3.googleusercontent.com/d/${driveMatch[1]}=w800`;
+      }
+      return url;
     }
 
     function setLanguage(lang) {
@@ -616,20 +657,24 @@
       return (item.options.length > 1 ? 'From ' : '') + item.options[0].price;
     }
 
-    function createProductCardHTML(item, badgeOverride = '') {
+    function createProductCardHTML(item, badgeOverride = '', priority = false) {
       const badgeText = badgeOverride || item.status;
       const badgeClass = badgeOverride
         ? 'bg-gradient-to-r from-crimson to-amber-700 text-gold-champagne border border-gold/60 shadow'
         : getStatusBadgeStyle(item.status);
+      const loadingAttr = priority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
 
       return `
-        <div onclick="openModal(${item.id})"
+        <div id="scent-card-${item.id}" onclick="openModal(${item.id})"
              class="group bg-obsidian-surface/60 backdrop-blur-sm gold-border gold-border-hover rounded-xl overflow-hidden cursor-pointer transition duration-300 flex flex-col">
-          <div class="relative w-full bg-black/40 overflow-hidden">
+          <div class="relative w-full min-h-[190px] sm:min-h-[230px] bg-black/50 img-skeleton overflow-hidden flex items-center justify-center">
             <img src="${item.image_url || FALLBACK_IMAGE}"
-                 onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"
+                 ${loadingAttr}
+                 decoding="async"
+                 onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton', 'min-h-[190px]', 'sm:min-h-[230px]');"
+                 onerror="this.onerror=null; this.src='${FALLBACK_IMAGE}'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton', 'min-h-[190px]', 'sm:min-h-[230px]');"
                  alt="${item.brand} ${item.name}"
-                 class="w-full h-auto object-contain block group-hover:scale-[1.03] transition duration-500" />
+                 class="w-full h-auto object-contain block opacity-0 group-hover:scale-[1.03] transition-all duration-500" />
             <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${badgeClass}">
               ${badgeText}
             </span>
@@ -663,7 +708,6 @@
         .filter(item => item.monthly_clicks >= MONTHLY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('month'))
         .sort((a, b) => b.monthly_clicks - a.monthly_clicks);
 
-      // Hide the entire Most Popular section until click counts qualify
       if (qualifiedToday.length === 0 && qualifiedMonthly.length === 0) {
         section.classList.add('hidden');
         grid.innerHTML = '';
@@ -674,22 +718,22 @@
 
       if (activePopularTab === 'today') {
         if (qualifiedToday.length > 0) {
-          grid.innerHTML = qualifiedToday.map(item => {
+          grid.innerHTML = qualifiedToday.map((item, idx) => {
             const label = item.today_clicks >= TODAY_POPULAR_MIN
               ? `🔥 TODAY TOP • ${item.today_clicks}`
               : '🔥 TODAY TOP';
-            return createProductCardHTML(item, label);
+            return createProductCardHTML(item, label, idx < 4);
           }).join('');
         } else {
           grid.innerHTML = `<p class="col-span-full text-center text-xs text-zinc-400 py-6">${i18n[currentLang].noPopularToday}</p>`;
         }
       } else {
         if (qualifiedMonthly.length > 0) {
-          grid.innerHTML = qualifiedMonthly.map(item => {
+          grid.innerHTML = qualifiedMonthly.map((item, idx) => {
             const label = item.monthly_clicks >= MONTHLY_POPULAR_MIN
               ? `👑 MONTHLY TOP • ${item.monthly_clicks}`
               : '👑 MONTHLY TOP';
-            return createProductCardHTML(item, label);
+            return createProductCardHTML(item, label, idx < 4);
           }).join('');
         } else {
           grid.innerHTML = `<p class="col-span-full text-center text-xs text-zinc-400 py-6">${i18n[currentLang].noPopularMonthly}</p>`;
@@ -716,81 +760,106 @@
       fetch(trackUrl, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
     }
 
+    function processCsvData(csvText) {
+      const rows = parseCSV(csvText);
+      if (rows.length < 2) return false;
+
+      const rawHeaders = rows[0].map(h => h.trim());
+      const normHeaders = rawHeaders.map(h => h.toLowerCase().replace(/\s+/g, '_'));
+      const idx = (name) => normHeaders.indexOf(name);
+
+      const sizeColIndices = [];
+      normHeaders.forEach((h, i) => {
+        if (h && !METADATA_COLS.has(h)) {
+          sizeColIndices.push({ index: i, rawHeader: rawHeaders[i], normHeader: h });
+        }
+      });
+
+      const todayStr = getYangonTodayStr();
+      const monthStr = todayStr.slice(0, 7);
+
+      allFragrances = rows.slice(1)
+        .filter(r => r[idx('name')] || r[idx('brand')])
+        .map((r, index) => {
+          const statusVal = r[idx('status')] || 'In-Stock';
+          const options = [];
+
+          sizeColIndices.forEach(col => {
+            const rawVal = r[col.index];
+            if (rawVal && rawVal.trim() !== '' && rawVal.trim() !== '-') {
+              const formatted = formatPrice(rawVal);
+              if (formatted) {
+                options.push({
+                  label: formatSizeLabel(col.rawHeader, statusVal),
+                  price: formatted,
+                  isDecant: (col.normHeader.includes('ml') && !col.normHeader.includes('full')) || col.normHeader.includes('decant')
+                });
+              }
+            }
+          });
+
+          const rawUpdated = (idx('last_updated') !== -1 ? r[idx('last_updated')] : '').trim();
+          let tClicks = idx('today_clicks') !== -1 ? (Number(r[idx('today_clicks')]) || 0) : 0;
+          let mClicks = idx('monthly_clicks') !== -1 ? (Number(r[idx('monthly_clicks')]) || 0) : 0;
+
+          if (rawUpdated && rawUpdated !== todayStr) {
+            tClicks = 0;
+            if (rawUpdated.slice(0, 7) !== monthStr) {
+              mClicks = 0;
+            }
+          }
+
+          const rawImg = r[idx('image_url')] || (idx('image') !== -1 ? r[idx('image')] : '') || '';
+
+          return {
+            id: index,
+            brand: r[idx('brand')] || 'Luxury House',
+            name: r[idx('name')] || 'Untitled Scent',
+            status: statusVal,
+            family: r[idx('family')] || (idx('category') !== -1 ? r[idx('category')] : '') || 'Niche',
+            notes: r[idx('notes')] || '',
+            options: options,
+            image_url: normalizeImageUrl(rawImg),
+            popular: (idx('popular') !== -1 ? r[idx('popular')] : '') || '',
+            today_clicks: tClicks,
+            monthly_clicks: mClicks
+          };
+        });
+
+      document.getElementById('sheetBadge').textContent = '● Live Catalog Synced';
+      allFragrances.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+      buildFamilyFilters();
+      renderPopular();
+      renderCatalog();
+      return true;
+    }
+
     async function loadCatalog() {
+      const CACHE_KEY = 'bfh_catalog_csv_v1';
+      let renderedFromCache = false;
+
+      try {
+        const cachedCsv = localStorage.getItem(CACHE_KEY);
+        if (cachedCsv) {
+          renderedFromCache = processCsvData(cachedCsv);
+        }
+      } catch (e) {}
+
       try {
         const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + Date.now());
         if (!response.ok) throw new Error('Network error');
         const csvText = await response.text();
-        const rows = parseCSV(csvText);
-        if (rows.length < 2) throw new Error('No data rows');
-
-        const rawHeaders = rows[0].map(h => h.trim());
-        const normHeaders = rawHeaders.map(h => h.toLowerCase().replace(/\s+/g, '_'));
-        const idx = (name) => normHeaders.indexOf(name);
-
-        const sizeColIndices = [];
-        normHeaders.forEach((h, i) => {
-          if (h && !METADATA_COLS.has(h)) {
-            sizeColIndices.push({ index: i, rawHeader: rawHeaders[i], normHeader: h });
-          }
-        });
-
-        const todayStr = getYangonTodayStr();
-        const monthStr = todayStr.slice(0, 7);
-
-        allFragrances = rows.slice(1)
-          .filter(r => r[idx('name')] || r[idx('brand')])
-          .map((r, index) => {
-            const statusVal = r[idx('status')] || 'In-Stock';
-            const options = [];
-
-            sizeColIndices.forEach(col => {
-              const rawVal = r[col.index];
-              if (rawVal && rawVal.trim() !== '' && rawVal.trim() !== '-') {
-                const formatted = formatPrice(rawVal);
-                if (formatted) {
-                  options.push({
-                    label: formatSizeLabel(col.rawHeader, statusVal),
-                    price: formatted,
-                    isDecant: (col.normHeader.includes('ml') && !col.normHeader.includes('full')) || col.normHeader.includes('decant')
-                  });
-                }
-              }
-            });
-
-            const rawUpdated = (idx('last_updated') !== -1 ? r[idx('last_updated')] : '').trim();
-            let tClicks = idx('today_clicks') !== -1 ? (Number(r[idx('today_clicks')]) || 0) : 0;
-            let mClicks = idx('monthly_clicks') !== -1 ? (Number(r[idx('monthly_clicks')]) || 0) : 0;
-
-            if (rawUpdated && rawUpdated !== todayStr) {
-              tClicks = 0;
-              if (rawUpdated.slice(0, 7) !== monthStr) {
-                mClicks = 0;
-              }
-            }
-
-            return {
-              id: index,
-              brand: r[idx('brand')] || 'Luxury House',
-              name: r[idx('name')] || 'Untitled Scent',
-              status: statusVal,
-              family: r[idx('family')] || (idx('category') !== -1 ? r[idx('category')] : '') || 'Niche',
-              notes: r[idx('notes')] || '',
-              options: options,
-              image_url: r[idx('image_url')] || (idx('image') !== -1 ? r[idx('image')] : '') || '',
-              popular: (idx('popular') !== -1 ? r[idx('popular')] : '') || '',
-              today_clicks: tClicks,
-              monthly_clicks: mClicks
-            };
-          });
-
-        document.getElementById('sheetBadge').textContent = '● Live Catalog Synced';
-        buildFamilyFilters();
-        renderPopular();
-        renderCatalog();
+        const ok = processCsvData(csvText);
+        if (ok) {
+          try { localStorage.setItem(CACHE_KEY, csvText); } catch (e) {}
+        } else if (!renderedFromCache) {
+          throw new Error('No data rows');
+        }
       } catch (err) {
         console.error(err);
-        document.getElementById('resultCount').textContent = 'Unable to load sheet data. Please check sheet rows.';
+        if (!renderedFromCache) {
+          document.getElementById('resultCount').textContent = 'Unable to load sheet data. Please check sheet rows.';
+        }
       }
     }
 
@@ -866,13 +935,14 @@
       }
 
       empty.classList.add('hidden');
-      grid.innerHTML = filtered.map(item => createProductCardHTML(item)).join('');
+      grid.innerHTML = filtered.map((item, idx) => createProductCardHTML(item, '', idx < 4)).join('');
     }
 
     function openModal(id) {
       const item = allFragrances.find(f => f.id === id);
       if (!item) return;
       currentModalItem = item;
+      savedScrollPosition = window.scrollY;
 
       const imgEl = document.getElementById('modalImage');
       imgEl.src = item.image_url || FALLBACK_IMAGE;
@@ -899,9 +969,20 @@
       renderSizeOptions();
       updateModalOrderLink();
 
+      const scrollBody = document.getElementById('modalScrollBody');
+      if (scrollBody) scrollBody.scrollTop = 0;
+
       const modal = document.getElementById('detailModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+
+      // Push state so iOS Back Swipe & Android Back Key return right back here instead of closing the website
+      try {
+        if (!window.history.state || !window.history.state.modalOpen) {
+          window.history.pushState({ modalOpen: true, itemId: id }, '', '#scent-' + id);
+        }
+      } catch (e) {}
     }
 
     function renderSizeOptions() {
@@ -938,11 +1019,32 @@
       document.getElementById('modalOrderBtn').href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(msg)}`;
     }
 
-    function closeModal() {
+    function hideModalUI() {
       const modal = document.getElementById('detailModal');
+      if (modal.classList.contains('hidden')) return;
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+      document.body.style.overflow = '';
+      // Restore exact scroll position where the user last tapped
+      window.scrollTo({ top: savedScrollPosition, behavior: 'instant' });
     }
+
+    function closeModal() {
+      hideModalUI();
+      try {
+        if (window.history.state && window.history.state.modalOpen) {
+          window.history.back();
+        }
+      } catch (e) {}
+    }
+
+    // Intercept iOS Back Swipe & Android Hardware/Gesture Back Button
+    window.addEventListener('popstate', () => {
+      const modal = document.getElementById('detailModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        hideModalUI();
+      }
+    });
 
     document.getElementById('detailModal').addEventListener('click', (e) => {
       if (e.target.id === 'detailModal') closeModal();
