@@ -346,7 +346,7 @@
     </div>
   </footer>
 
-  <!-- Showroom Detail Modal (With Sticky Back/Close Header & History Swipe-Back Support) -->
+  <!-- Showroom Detail Modal (With 2-Photo Gallery, Sticky Back/Close Header & Swipe Support) -->
   <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-2.5 sm:p-4">
     <div class="bg-obsidian-surface gold-border rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[92vh] flex flex-col">
       <!-- Sticky Top Navigation Bar (Always visible while scrolling) -->
@@ -362,10 +362,30 @@
       </div>
 
       <div id="modalScrollBody" class="overflow-y-auto grid grid-cols-1 md:grid-cols-2 pb-6 sm:pb-4">
-        <!-- Full Uncropped Product Image -->
-        <div class="bg-black flex items-center justify-center relative p-2">
-          <img id="modalImage" src="" alt="" class="w-full h-auto max-h-[420px] object-contain rounded-lg" />
-          <span id="modalStatusBadge" class="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide uppercase"></span>
+        <!-- Full Uncropped Product Image Gallery (Supports image_url & image_url_2) -->
+        <div class="bg-black flex flex-col items-center justify-center p-2.5">
+          <div id="modalImageContainer" class="relative w-full flex items-center justify-center select-none">
+            <img id="modalImage" src="" alt="" class="w-full h-auto max-h-[400px] object-contain rounded-lg transition-opacity duration-200" />
+            <span id="modalStatusBadge" class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide uppercase"></span>
+
+            <!-- Prev / Next Gallery Buttons (Shown only when image_url_2 exists) -->
+            <button id="modalPrevBtn" type="button" onclick="setModalImage(currentModalImageIndex - 1)" aria-label="Previous photo"
+                    class="hidden absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-obsidian/85 hover:bg-gold hover:text-obsidian text-white border border-gold/50 items-center justify-center shadow-lg transition">
+              ‹
+            </button>
+            <button id="modalNextBtn" type="button" onclick="setModalImage(currentModalImageIndex + 1)" aria-label="Next photo"
+                    class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-obsidian/85 hover:bg-gold hover:text-obsidian text-white border border-gold/50 items-center justify-center shadow-lg transition">
+              ›
+            </button>
+
+            <!-- Photo Counter Pill (e.g., 1 / 2) -->
+            <span id="modalImageCounter" class="hidden absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-obsidian/85 text-gold-champagne border border-gold/40">
+              1 / 2
+            </span>
+          </div>
+
+          <!-- Thumbnail Switcher (Shown only when image_url_2 exists) -->
+          <div id="modalThumbnails" class="hidden items-center justify-center gap-2.5 mt-3 pt-1"></div>
         </div>
 
         <!-- Product Details & Order -->
@@ -420,7 +440,8 @@
     const METADATA_COLS = new Set([
       'no', 'id', 'sr', 'sku', 'code', 'brand', 'name', 'status',
       'family', 'category', 'gender', 'concentration', 'notes',
-      'image_url', 'image', 'popular', 'today_clicks', 'monthly_clicks',
+      'image_url', 'image', 'image_url_2', 'image_2', 'image2',
+      'popular', 'today_clicks', 'monthly_clicks',
       'last_updated', 'description', 'desc', 'remark', 'remarks'
     ]);
 
@@ -511,6 +532,8 @@
     let activeStatus = 'All';
     let activeFamily = 'All';
     let currentModalItem = null;
+    let currentModalImages = [];
+    let currentModalImageIndex = 0;
     let currentModalOptions = [];
     let currentSelectedOption = null;
     let savedScrollPosition = 0;
@@ -544,6 +567,10 @@
       } catch (e) {}
 
       return url;
+    }
+
+    function escapeAttr(str) {
+      return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
     }
 
     function setLanguage(lang) {
@@ -674,13 +701,17 @@
         ? 'bg-gradient-to-r from-crimson to-amber-700 text-gold-champagne border border-gold/60 shadow'
         : getStatusBadgeStyle(item.status);
       const loadingAttr = priority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
-      const safeRawImg = (item.raw_image_url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const primaryImg = item.images && item.images.length > 0 ? item.images[0] : { url: FALLBACK_IMAGE, rawUrl: '' };
+      const safeRawImg = escapeAttr(primaryImg.rawUrl);
+      const multiPhotoBadge = item.images && item.images.length > 1
+        ? `<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-obsidian/80 text-gold-champagne border border-gold/40 backdrop-blur-sm">1 / ${item.images.length}</span>`
+        : '';
 
       return `
         <div id="scent-card-${item.id}" onclick="openModal(${item.id})"
              class="group bg-obsidian-surface/60 backdrop-blur-sm gold-border gold-border-hover rounded-xl overflow-hidden cursor-pointer transition duration-300 flex flex-col">
           <div class="relative w-full min-h-[190px] sm:min-h-[230px] bg-black/50 img-skeleton overflow-hidden flex items-center justify-center">
-            <img src="${item.image_url || FALLBACK_IMAGE}"
+            <img src="${primaryImg.url || FALLBACK_IMAGE}"
                  ${loadingAttr}
                  decoding="async"
                  onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton', 'min-h-[190px]', 'sm:min-h-[230px]');"
@@ -690,6 +721,7 @@
             <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${badgeClass}">
               ${badgeText}
             </span>
+            ${multiPhotoBadge}
           </div>
           <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between border-t border-gold/10">
             <div>
@@ -790,6 +822,9 @@
       const todayStr = getYangonTodayStr();
       const monthStr = todayStr.slice(0, 7);
 
+      const img1Idx = idx('image_url') !== -1 ? idx('image_url') : idx('image');
+      const img2Idx = idx('image_url_2') !== -1 ? idx('image_url_2') : (idx('image_2') !== -1 ? idx('image_2') : idx('image2'));
+
       allFragrances = rows.slice(1)
         .filter(r => r[idx('name')] || r[idx('brand')])
         .map((r, index) => {
@@ -821,7 +856,16 @@
             }
           }
 
-          const rawImg = (r[idx('image_url')] || (idx('image') !== -1 ? r[idx('image')] : '') || '').trim();
+          const rawImg1 = (img1Idx !== -1 ? r[img1Idx] : '' || '').trim();
+          const rawImg2 = (img2Idx !== -1 ? r[img2Idx] : '' || '').trim();
+
+          const images = [];
+          if (rawImg1) {
+            images.push({ url: normalizeImageUrl(rawImg1), rawUrl: rawImg1 });
+          }
+          if (rawImg2) {
+            images.push({ url: normalizeImageUrl(rawImg2), rawUrl: rawImg2 });
+          }
 
           return {
             id: index,
@@ -831,8 +875,7 @@
             family: r[idx('family')] || (idx('category') !== -1 ? r[idx('category')] : '') || 'Niche',
             notes: r[idx('notes')] || '',
             options: options,
-            raw_image_url: rawImg,
-            image_url: normalizeImageUrl(rawImg),
+            images: images,
             popular: (idx('popular') !== -1 ? r[idx('popular')] : '') || '',
             today_clicks: tClicks,
             monthly_clicks: mClicks
@@ -850,7 +893,7 @@
     }
 
     async function loadCatalog() {
-      const CACHE_KEY = 'bfh_catalog_csv_v1';
+      const CACHE_KEY = 'bfh_catalog_csv_v2';
       let renderedFromCache = false;
 
       try {
@@ -953,28 +996,97 @@
       grid.innerHTML = filtered.map((item, idx) => createProductCardHTML(item, '', idx < 4)).join('');
     }
 
-    function openModal(id) {
-      const item = allFragrances.find(f => f.id === id);
-      if (!item) return;
-      currentModalItem = item;
-      savedScrollPosition = window.scrollY;
+    function setModalImage(index) {
+      if (!currentModalImages || currentModalImages.length === 0) return;
+      const total = currentModalImages.length;
+      currentModalImageIndex = ((index % total) + total) % total;
+      const activeImg = currentModalImages[currentModalImageIndex];
 
       const imgEl = document.getElementById('modalImage');
       delete imgEl.dataset.retried;
-      imgEl.src = item.image_url || FALLBACK_IMAGE;
+      imgEl.src = activeImg.url || FALLBACK_IMAGE;
       imgEl.onerror = () => {
-        if (!imgEl.dataset.retried && item.raw_image_url) {
+        if (!imgEl.dataset.retried && activeImg.rawUrl) {
           imgEl.dataset.retried = '1';
-          imgEl.src = item.raw_image_url;
+          imgEl.src = activeImg.rawUrl;
           return;
         }
         imgEl.onerror = null;
         imgEl.src = FALLBACK_IMAGE;
       };
 
+      const counterEl = document.getElementById('modalImageCounter');
+      if (counterEl && total > 1) {
+        counterEl.textContent = `${currentModalImageIndex + 1} / ${total}`;
+      }
+
+      const thumbsContainer = document.getElementById('modalThumbnails');
+      if (thumbsContainer && total > 1) {
+        thumbsContainer.querySelectorAll('button').forEach((btn, idx) => {
+          btn.className = idx === currentModalImageIndex
+            ? 'w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 border-gold shadow-md bg-black transition scale-105'
+            : 'w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-zinc-700 opacity-60 hover:opacity-100 bg-black transition';
+        });
+      }
+    }
+
+    function openModal(id) {
+      const item = allFragrances.find(f => f.id === id);
+      if (!item) return;
+      currentModalItem = item;
+      savedScrollPosition = window.scrollY;
+
+      currentModalImages = item.images && item.images.length > 0
+        ? item.images
+        : [{ url: FALLBACK_IMAGE, rawUrl: '' }];
+      currentModalImageIndex = 0;
+
+      const prevBtn = document.getElementById('modalPrevBtn');
+      const nextBtn = document.getElementById('modalNextBtn');
+      const counterEl = document.getElementById('modalImageCounter');
+      const thumbsContainer = document.getElementById('modalThumbnails');
+
+      if (currentModalImages.length > 1) {
+        prevBtn.classList.remove('hidden');
+        prevBtn.classList.add('flex');
+        nextBtn.classList.remove('hidden');
+        nextBtn.classList.add('flex');
+        counterEl.classList.remove('hidden');
+
+        thumbsContainer.innerHTML = currentModalImages.map((imgObj, idx) => {
+          const safeRaw = escapeAttr(imgObj.rawUrl);
+          return `
+            <button type="button" onclick="setModalImage(${idx})"
+                    class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-zinc-700 opacity-60 hover:opacity-100 bg-black transition">
+              <img src="${imgObj.url || FALLBACK_IMAGE}"
+                   onerror="if(!this.dataset.retried && '${safeRaw}'){this.dataset.retried='1';this.src='${safeRaw}';return;} this.onerror=null; this.src='${FALLBACK_IMAGE}';"
+                   alt="Photo ${idx + 1}"
+                   class="w-full h-full object-cover" />
+            </button>
+          `;
+        }).join('');
+        thumbsContainer.classList.remove('hidden');
+        thumbsContainer.classList.add('flex');
+
+        // Preload 2nd photo in background for instant switching
+        const preload2 = new Image();
+        preload2.src = currentModalImages[1].url;
+      } else {
+        prevBtn.classList.add('hidden');
+        prevBtn.classList.remove('flex');
+        nextBtn.classList.add('hidden');
+        nextBtn.classList.remove('flex');
+        counterEl.classList.add('hidden');
+        thumbsContainer.classList.add('hidden');
+        thumbsContainer.classList.remove('flex');
+        thumbsContainer.innerHTML = '';
+      }
+
+      setModalImage(0);
+
       const badge = document.getElementById('modalStatusBadge');
       badge.textContent = item.status;
-      badge.className = `absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide uppercase ${getStatusBadgeStyle(item.status)}`;
+      badge.className = `absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide uppercase ${getStatusBadgeStyle(item.status)}`;
 
       document.getElementById('modalBrand').textContent = item.brand;
       document.getElementById('modalName').textContent = item.name;
@@ -1049,7 +1161,6 @@
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       document.body.style.overflow = '';
-      // Restore exact scroll position where the user last tapped
       window.scrollTo({ top: savedScrollPosition, behavior: 'instant' });
     }
 
@@ -1061,6 +1172,24 @@
         }
       } catch (e) {}
     }
+
+    // Touch swipe left/right on modal image to switch between photo 1 and photo 2
+    let modalTouchStartX = 0;
+    const modalImageContainer = document.getElementById('modalImageContainer');
+    modalImageContainer.addEventListener('touchstart', (e) => {
+      modalTouchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    modalImageContainer.addEventListener('touchend', (e) => {
+      if (!currentModalImages || currentModalImages.length <= 1) return;
+      const diffX = e.changedTouches[0].screenX - modalTouchStartX;
+      if (Math.abs(diffX) > 40) {
+        if (diffX < 0) {
+          setModalImage(currentModalImageIndex + 1);
+        } else {
+          setModalImage(currentModalImageIndex - 1);
+        }
+      }
+    }, { passive: true });
 
     // Intercept iOS Back Swipe & Android Hardware/Gesture Back Button
     window.addEventListener('popstate', () => {
