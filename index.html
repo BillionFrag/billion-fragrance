@@ -128,8 +128,8 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden border-b border-gold/15 bg-gradient-to-b from-obsidian-surface to-obsidian/70 py-8 sm:py-12 px-4">
+  <!-- Hero Section + VIP Telegram Pre-Order Channel Card -->
+  <section class="relative overflow-hidden border-b border-gold/15 bg-gradient-to-b from-obsidian-surface to-obsidian/70 py-8 sm:py-11 px-4">
     <div class="max-w-4xl mx-auto text-center">
       <span class="inline-block px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.2em] bg-crimson/20 text-gold-champagne border border-crimson/50 mb-3" data-i18n="heroBadge">
         Curated Scent Showroom
@@ -140,6 +140,41 @@
       <p class="text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed" data-i18n="heroSubtitle">
         Explore ready-to-ship full bottles, hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.
       </p>
+
+      <!-- VIP Telegram Channel Card (Left: Pre-Order Special Offers & Daily Updates + Link | Right: QR Code) -->
+      <div class="max-w-3xl mx-auto mt-7 p-4 sm:p-5 rounded-2xl bg-obsidian-surface/85 backdrop-blur-md border border-gold/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 text-center sm:text-left">
+        <div class="flex-1">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] bg-gold/15 text-gold border border-gold/35 mb-2" data-i18n="channelVipBadge">
+            Official Telegram Channel
+          </span>
+          <h3 class="font-serif text-xl sm:text-2xl font-bold text-gold-champagne leading-snug">
+            Pre-Order Special Offers &amp; Daily Updates
+          </h3>
+          <p class="text-xs sm:text-sm text-zinc-300 mt-1.5 leading-relaxed" data-i18n="channelCardDesc">
+            Join our Telegram Channel (@debillionaires) for exclusive pre-order prices, limited deals, and daily stock arrivals.
+          </p>
+          <div class="mt-3.5 flex flex-wrap items-center justify-center sm:justify-start gap-3">
+            <a href="https://t.me/debillionaires" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold to-amber-500 hover:from-gold-champagne hover:to-gold text-obsidian text-xs font-bold tracking-wide shadow-md transition">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.17.326.016.094.036.308.02.475z"/>
+              </svg>
+              <span data-i18n="joinChannelBtn">Join Channel (@debillionaires)</span>
+            </a>
+            <span class="text-[11px] text-zinc-400">t.me/debillionaires</span>
+          </div>
+        </div>
+
+        <!-- Channel QR Code Box -->
+        <a href="https://t.me/debillionaires" target="_blank" rel="noopener" title="Scan or Tap to join @debillionaires"
+           class="shrink-0 flex flex-col items-center bg-white p-2.5 rounded-xl border-2 border-gold shadow-lg hover:scale-[1.03] transition">
+          <img src="images/channel-qr.jpg"
+               onerror="if(!this.dataset.step){this.dataset.step='1';this.src='image/channel-qr.jpg';}else if(this.dataset.step==='1'){this.dataset.step='2';this.src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https%3A%2F%2Ft.me%2Fdebillionaires';}"
+               alt="Billion Fragrance House Telegram Channel QR"
+               class="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-md" />
+          <span class="text-[10px] font-bold text-obsidian tracking-wider uppercase mt-1.5">Scan QR</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -208,6 +243,34 @@
 
   <!-- Main Catalog Grid -->
   <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
+    <!-- Targeted Promo Box (Visible when Pre-Order Tab is active) -->
+    <div id="preOrderPromoBox" class="hidden mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-crimson-deep/85 via-obsidian-surface/95 to-obsidian-surface/95 border border-gold/50 shadow-xl flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-center sm:text-left">
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-crimson text-gold-champagne border border-gold/40 mb-1.5">
+          🔥 Pre-Order VIP Channel
+        </span>
+        <h4 class="font-serif text-xl sm:text-2xl font-bold text-white" data-i18n="preOrderBoxTitle">
+          Pre-Order Special Offers &amp; Daily Updates
+        </h4>
+        <p class="text-xs sm:text-sm text-zinc-300 mt-1 max-w-2xl" data-i18n="preOrderBoxDesc">
+          Get instant notifications on discounted international pre-order batches, flash deals, and arrival updates on our Telegram Channel.
+        </p>
+        <a href="https://t.me/debillionaires" target="_blank" rel="noopener"
+           class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold hover:bg-gold-champagne text-obsidian text-xs font-bold transition shadow">
+          <span data-i18n="joinPreOrderBtn">Join Pre-Order Channel (@debillionaires) →</span>
+        </a>
+      </div>
+
+      <a href="https://t.me/debillionaires" target="_blank" rel="noopener"
+         class="shrink-0 flex flex-col items-center bg-white p-2 rounded-xl border-2 border-gold shadow-md hover:scale-[1.03] transition">
+        <img src="images/channel-qr.jpg"
+             onerror="if(!this.dataset.step){this.dataset.step='1';this.src='image/channel-qr.jpg';}else if(this.dataset.step==='1'){this.dataset.step='2';this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Ft.me%2Fdebillionaires';}"
+             alt="Pre-Order Channel QR"
+             class="w-20 h-20 sm:w-24 sm:h-24 object-contain rounded" />
+        <span class="text-[9px] font-bold text-obsidian uppercase tracking-wider mt-1">@debillionaires</span>
+      </a>
+    </div>
+
     <div class="flex items-center justify-between mb-4 text-xs text-zinc-400">
       <span id="resultCount">Loading catalog...</span>
       <span id="sheetBadge" class="text-gold/80"></span>
@@ -221,18 +284,46 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-gold/20 bg-obsidian-surface/90 py-8 px-4 mt-12 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400">
-      <div>
-        <span class="font-serif text-base text-gold font-semibold">Billion</span>
-        <span class="font-serif text-base text-gold-champagne font-semibold"> Fragrance House</span>
-        <span class="mx-2 text-zinc-600">|</span>
-        <span data-i18n="footerTagline">Authentic Perfumes & Hand-Decanted Samples</span>
+  <!-- Footer with Location & Phone Number -->
+  <footer class="border-t border-gold/25 bg-obsidian-surface/95 py-8 px-4 mt-12 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 text-xs text-zinc-400">
+      <!-- Brand Info -->
+      <div class="text-center md:text-left">
+        <div>
+          <span class="font-serif text-lg text-gold font-semibold">Billion</span>
+          <span class="font-serif text-lg text-gold-champagne font-semibold"> Fragrance House</span>
+        </div>
+        <p class="text-zinc-400 mt-1" data-i18n="footerTagline">Authentic Perfumes &amp; Hand-Decanted Samples</p>
       </div>
-      <a href="https://t.me/burmesejuli" target="_blank" rel="noopener" class="text-gold hover:text-gold-champagne underline underline-offset-4">
-        Order & Inquiries: @burmesejuli
-      </a>
+
+      <!-- Location & Phone Number -->
+      <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-zinc-300">
+        <div class="inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span>Downtown, Yangon, Myanmar</span>
+        </div>
+
+        <a href="tel:09766229677" class="inline-flex items-center gap-1.5 text-gold-champagne hover:text-gold font-medium transition">
+          <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          <span>09766229677</span>
+        </a>
+      </div>
+
+      <!-- Telegram Links -->
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="https://t.me/debillionaires" target="_blank" rel="noopener" class="text-gold-champagne hover:text-gold underline underline-offset-4">
+          Channel: @debillionaires
+        </a>
+        <span class="text-zinc-600">|</span>
+        <a href="https://t.me/burmesejuli" target="_blank" rel="noopener" class="text-gold hover:text-gold-champagne underline underline-offset-4">
+          Admin: @burmesejuli
+        </a>
+      </div>
     </div>
   </footer>
 
@@ -325,6 +416,12 @@
         heroBadge: "Curated Scent Showroom",
         heroTitle: "Discover Your Signature Scent",
         heroSubtitle: "Explore ready-to-ship full bottles, hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.",
+        channelVipBadge: "Official Telegram Channel",
+        channelCardDesc: "Join our Telegram Channel (@debillionaires) for exclusive pre-order prices, limited deals, and daily stock arrivals.",
+        joinChannelBtn: "Join Channel (@debillionaires)",
+        preOrderBoxTitle: "Pre-Order Special Offers & Daily Updates",
+        preOrderBoxDesc: "Get instant notifications on discounted international pre-order batches, flash deals, and arrival updates on our Telegram Channel.",
+        joinPreOrderBtn: "Join Pre-Order Channel (@debillionaires) →",
         popularEyebrow: "Top Selling Selection",
         popularHeading: "Most Popular Fragrances",
         todayPopular: "🔥 TODAY Popular",
@@ -350,6 +447,12 @@
         heroBadge: "Luxury Perfume Showroom",
         heroTitle: "သင့်အတွက် အလိုက်ဖက်ဆုံး ရနံ့ကို ရှာဖွေပါ",
         heroSubtitle: "အသင့်ဝယ်ယူနိုင်သော Full Size များ၊ Decant (3ml, 5ml, 10ml, 30ml) များနှင့် နိုင်ငံတကာ Pre-Order ရေမွှေးများကို ကြည့်ရှုပြီး Telegram မှတစ်ဆင့် တိုက်ရိုက်မှာယူနိုင်ပါသည်။",
+        channelVipBadge: "Official Telegram Channel",
+        channelCardDesc: "Pre-Order အထူးဈေးနှုန်းများ၊ Batch ပိတ်ရက်နှင့် နေ့စဉ် Update များကို @debillionaires Channel တွင် ဝင်ရောက်ကြည့်ရှုနိုင်ပါသည်။",
+        joinChannelBtn: "Channel သို့ ဝင်ရောက်ရန် (@debillionaires)",
+        preOrderBoxTitle: "Pre-Order Special Offers & Daily Updates",
+        preOrderBoxDesc: "နိုင်ငံတကာ Pre-Order အထူးလျှော့ဈေးများနှင့် နေ့စဉ် ရေမွှေး Update များကို Telegram Channel (@debillionaires) တွင် အချိန်နှင့်တစ်ပြေးညီ တင်ပေးနေပါသည်။",
+        joinPreOrderBtn: "Pre-Order Channel သို့ ဝင်ရန် (@debillionaires) →",
         popularEyebrow: "ရောင်းအားအကောင်းဆုံး ရွေးချယ်မှုများ",
         popularHeading: "လူကြိုက်အများဆုံး ရေမွှေးများ",
         todayPopular: "🔥 TODAY Popular",
@@ -729,6 +832,18 @@
     }
 
     function renderCatalog() {
+      // Show Targeted Promo Box only when Pre-Order tab is active
+      const promoBox = document.getElementById('preOrderPromoBox');
+      if (promoBox) {
+        if (activeStatus === 'Pre-Order') {
+          promoBox.classList.remove('hidden');
+          promoBox.classList.add('flex');
+        } else {
+          promoBox.classList.add('hidden');
+          promoBox.classList.remove('flex');
+        }
+      }
+
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
       const filtered = allFragrances.filter(item => {
         const matchStatus = matchesStatusFilter(item, activeStatus);
