@@ -141,7 +141,7 @@
         Explore ready-to-ship full bottles, hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.
       </p>
 
-      <!-- VIP Telegram Channel Card (Left: Pre-Order Special Offers & Daily Updates + Link | Right: QR Code) -->
+      <!-- VIP Telegram Channel Card (Left: Pre-Order Special Offers & Daily Updates + Link | Right: Full Poster QR) -->
       <div class="max-w-3xl mx-auto mt-7 p-4 sm:p-5 rounded-2xl bg-obsidian-surface/85 backdrop-blur-md border border-gold/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 text-center sm:text-left">
         <div class="flex-1">
           <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] bg-gold/15 text-gold border border-gold/35 mb-2" data-i18n="channelVipBadge">
@@ -177,8 +177,8 @@
     </div>
   </section>
 
-  <!-- Top Selling / Popular Products Section -->
-  <section id="popularSection" class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-8 pb-4 border-b border-gold/15 bg-obsidian-surface/40 rounded-2xl my-4">
+  <!-- Top Selling / Popular Products Section (Hidden until click counts qualify) -->
+  <section id="popularSection" class="hidden max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-8 pb-4 border-b border-gold/15 bg-obsidian-surface/40 rounded-2xl my-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
       <div>
         <span class="text-[11px] uppercase tracking-[0.22em] text-gold font-semibold" data-i18n="popularEyebrow">
@@ -384,7 +384,7 @@
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDgub1JN3qKMEwakffJD-WNZ8IdBCtTnCHLP-teBYz7b7rd4SBdULk_qkFUnR_gEe_Rg/exec";
     const TELEGRAM_USERNAME = "burmesejuli";
 
-    // Auto-Popular thresholds
+    // Auto-Popular thresholds (Shows only after reaching these click counts)
     const TODAY_POPULAR_MIN = 5;
     const MONTHLY_POPULAR_MIN = 10;
 
@@ -424,6 +424,8 @@
         popularHeading: "Most Popular Fragrances",
         todayPopular: "🔥 TODAY Popular",
         monthlyPopular: "👑 Monthly Popular",
+        noPopularToday: "No top fragrances recorded for today yet.",
+        noPopularMonthly: "No monthly top fragrances recorded yet.",
         tabAll: "All Scents",
         tabInStock: "In-Stock",
         tabDecants: "Decants",
@@ -455,6 +457,8 @@
         popularHeading: "လူကြိုက်အများဆုံး ရေမွှေးများ",
         todayPopular: "🔥 TODAY Popular",
         monthlyPopular: "👑 Monthly Popular",
+        noPopularToday: "ယနေ့အတွက် လူကြိုက်အများဆုံး စာရင်း မရှိသေးပါ။",
+        noPopularMonthly: "ယခုလအတွက် လူကြိုက်အများဆုံး စာရင်း မရှိသေးပါ။",
         tabAll: "အားလုံး",
         tabInStock: "In-Stock (အသင့်ရှိ)",
         tabDecants: "Decants (ခွဲရောင်း)",
@@ -650,17 +654,25 @@
     function renderPopular() {
       const grid = document.getElementById('popularGrid');
       const section = document.getElementById('popularSection');
-      if (allFragrances.length === 0) {
+
+      const qualifiedToday = allFragrances
+        .filter(item => item.today_clicks >= TODAY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('today'))
+        .sort((a, b) => b.today_clicks - a.today_clicks);
+
+      const qualifiedMonthly = allFragrances
+        .filter(item => item.monthly_clicks >= MONTHLY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('month'))
+        .sort((a, b) => b.monthly_clicks - a.monthly_clicks);
+
+      // Hide the entire Most Popular section until click counts qualify
+      if (qualifiedToday.length === 0 && qualifiedMonthly.length === 0) {
         section.classList.add('hidden');
+        grid.innerHTML = '';
         return;
       }
+
       section.classList.remove('hidden');
 
       if (activePopularTab === 'today') {
-        const qualifiedToday = allFragrances
-          .filter(item => item.today_clicks >= TODAY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('today'))
-          .sort((a, b) => b.today_clicks - a.today_clicks);
-
         if (qualifiedToday.length > 0) {
           grid.innerHTML = qualifiedToday.map(item => {
             const label = item.today_clicks >= TODAY_POPULAR_MIN
@@ -669,16 +681,9 @@
             return createProductCardHTML(item, label);
           }).join('');
         } else {
-          const fallbackToday = [...allFragrances]
-            .sort((a, b) => b.today_clicks - a.today_clicks)
-            .slice(0, 4);
-          grid.innerHTML = fallbackToday.map(item => createProductCardHTML(item, '✨ FEATURED')).join('');
+          grid.innerHTML = `<p class="col-span-full text-center text-xs text-zinc-400 py-6">${i18n[currentLang].noPopularToday}</p>`;
         }
       } else {
-        const qualifiedMonthly = allFragrances
-          .filter(item => item.monthly_clicks >= MONTHLY_POPULAR_MIN || (item.popular || '').toLowerCase().includes('month'))
-          .sort((a, b) => b.monthly_clicks - a.monthly_clicks);
-
         if (qualifiedMonthly.length > 0) {
           grid.innerHTML = qualifiedMonthly.map(item => {
             const label = item.monthly_clicks >= MONTHLY_POPULAR_MIN
@@ -687,10 +692,7 @@
             return createProductCardHTML(item, label);
           }).join('');
         } else {
-          const fallbackMonthly = [...allFragrances]
-            .sort((a, b) => b.monthly_clicks - a.monthly_clicks)
-            .slice(0, 4);
-          grid.innerHTML = fallbackMonthly.map(item => createProductCardHTML(item, '✨ FEATURED')).join('');
+          grid.innerHTML = `<p class="col-span-full text-center text-xs text-zinc-400 py-6">${i18n[currentLang].noPopularMonthly}</p>`;
         }
       }
     }
@@ -830,7 +832,6 @@
     }
 
     function renderCatalog() {
-      // Show Targeted Promo Box only when Pre-Order tab is active
       const promoBox = document.getElementById('preOrderPromoBox');
       if (promoBox) {
         if (activeStatus === 'Pre-Order') {
@@ -932,8 +933,8 @@
       if (!currentModalItem || !currentSelectedOption) return;
       document.getElementById('modalSelectedPrice').textContent = currentSelectedOption.price;
       const msg = currentLang === 'mm'
-        ? `မင်္ဂလာပါ Billion Fragrance House ခင်ဗျာ —\n• ရေမွှေး: ${currentModalItem.brand} - ${currentModalItem.name}\n• အမျိုးအစား: ${currentModalItem.status}\n• Size: ${currentSelectedOption.label} (${currentSelectedOption.price})\nမှာယူလိုပါတယ်။`
-        : `Hello Billion Fragrance House —\n• Fragrance: ${currentModalItem.brand} - ${currentModalItem.name}\n• Status: ${currentModalItem.status}\n• Option: ${currentSelectedOption.label} (${currentSelectedOption.price})\nI would like to place an order.`;
+        ? `ဟယ်လို ,\n• ရေမွှေး: ${currentModalItem.brand} - ${currentModalItem.name}\n• Size: ${currentSelectedOption.label} (${currentSelectedOption.price})\nမှာယူလိုပါတယ်။`
+        : `Hello,\n• Fragrance: ${currentModalItem.brand} - ${currentModalItem.name}\n• Option: ${currentSelectedOption.label} (${currentSelectedOption.price})\nI would like to place an order.`;
       document.getElementById('modalOrderBtn').href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(msg)}`;
     }
 
