@@ -528,10 +528,21 @@
     function normalizeImageUrl(rawUrl) {
       if (!rawUrl) return '';
       const url = rawUrl.trim();
+      if (url.startsWith('data:')) return url;
+
       const driveMatch = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([a-zA-Z0-9_-]+)/);
       if (driveMatch && driveMatch[1]) {
         return `https://lh3.googleusercontent.com/d/${driveMatch[1]}=w800`;
       }
+
+      // Auto-compress & resize large GitHub images to fast WebP (~100KB)
+      try {
+        if (window.location.protocol.startsWith('http') && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+          const fullUrl = new URL(url, window.location.href).href;
+          return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=800&output=webp&q=82`;
+        }
+      } catch (e) {}
+
       return url;
     }
 
@@ -663,6 +674,7 @@
         ? 'bg-gradient-to-r from-crimson to-amber-700 text-gold-champagne border border-gold/60 shadow'
         : getStatusBadgeStyle(item.status);
       const loadingAttr = priority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+      const safeRawImg = (item.raw_image_url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
       return `
         <div id="scent-card-${item.id}" onclick="openModal(${item.id})"
@@ -672,7 +684,7 @@
                  ${loadingAttr}
                  decoding="async"
                  onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton', 'min-h-[190px]', 'sm:min-h-[230px]');"
-                 onerror="this.onerror=null; this.src='${FALLBACK_IMAGE}'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton', 'min-h-[190px]', 'sm:min-h-[230px]');"
+                 onerror="if(!this.dataset.retried && '${safeRawImg}'){this.dataset.retried='1';this.src='${safeRawImg}';return;} this.onerror=null; this.src='${FALLBACK_IMAGE}'; this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-skeleton', 'min-h-[190px]', 'sm:min-h-[230px]');"
                  alt="${item.brand} ${item.name}"
                  class="w-full h-auto object-contain block opacity-0 group-hover:scale-[1.03] transition-all duration-500" />
             <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${badgeClass}">
@@ -809,7 +821,7 @@
             }
           }
 
-          const rawImg = r[idx('image_url')] || (idx('image') !== -1 ? r[idx('image')] : '') || '';
+          const rawImg = (r[idx('image_url')] || (idx('image') !== -1 ? r[idx('image')] : '') || '').trim();
 
           return {
             id: index,
@@ -819,6 +831,7 @@
             family: r[idx('family')] || (idx('category') !== -1 ? r[idx('category')] : '') || 'Niche',
             notes: r[idx('notes')] || '',
             options: options,
+            raw_image_url: rawImg,
             image_url: normalizeImageUrl(rawImg),
             popular: (idx('popular') !== -1 ? r[idx('popular')] : '') || '',
             today_clicks: tClicks,
@@ -826,8 +839,10 @@
           };
         });
 
-      document.getElementById('sheetBadge').textContent = '● Live Catalog Synced';
+      // Automatically sort fragrances A to Z by name
       allFragrances.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+      document.getElementById('sheetBadge').textContent = '● Live Catalog Synced';
       buildFamilyFilters();
       renderPopular();
       renderCatalog();
@@ -945,8 +960,17 @@
       savedScrollPosition = window.scrollY;
 
       const imgEl = document.getElementById('modalImage');
+      delete imgEl.dataset.retried;
       imgEl.src = item.image_url || FALLBACK_IMAGE;
-      imgEl.onerror = () => { imgEl.src = FALLBACK_IMAGE; };
+      imgEl.onerror = () => {
+        if (!imgEl.dataset.retried && item.raw_image_url) {
+          imgEl.dataset.retried = '1';
+          imgEl.src = item.raw_image_url;
+          return;
+        }
+        imgEl.onerror = null;
+        imgEl.src = FALLBACK_IMAGE;
+      };
 
       const badge = document.getElementById('modalStatusBadge');
       badge.textContent = item.status;
