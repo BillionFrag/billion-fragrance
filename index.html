@@ -108,7 +108,7 @@
 
   <!-- Top Announcement Bar -->
   <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep text-gold-champagne text-xs py-2 px-4 text-center tracking-wider border-b border-gold/20">
-    <span data-i18n="topBanner">100% Authentic Niche & Designer Fragrances • In-Stock, Decants & Pre-Order</span>
+    <span data-i18n="topBanner">100% Authentic Niche & Designer Fragrances • In-Stock, Vials, Decants & Pre-Order</span>
   </div>
 
   <!-- Non-Sticky Header (Scrolls away naturally so mobile screen stays clear) -->
@@ -131,7 +131,7 @@
           </h1>
         </a>
         <p class="block text-[11px] sm:text-xs tracking-[0.22em] text-gold-champagne/85 uppercase mt-3 sm:mt-4" data-i18n="brandSub">
-          Luxury Perfumes • Decants • Pre-Order
+          Luxury Perfumes • Vials • Decants • Pre-Order
         </p>
       </div>
 
@@ -164,7 +164,7 @@
         Discover Your Signature Scent
       </h2>
       <p class="text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed" data-i18n="heroSubtitle">
-        Explore ready-to-ship full bottles, hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.
+        Explore ready-to-ship full bottles, official vials (1.5ml–2ml), hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.
       </p>
 
       <!-- VIP Telegram Channel Card -->
@@ -238,7 +238,7 @@
   <!-- Filter & Search Bar -->
   <section class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-7 pb-2">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <!-- Status Tabs -->
+      <!-- Status Tabs (Vials kept strictly separate from main perfumes) -->
       <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" id="statusTabs">
         <button data-status="All" class="status-tab active px-4 py-2 rounded-full text-xs font-semibold bg-gold text-obsidian border border-gold transition whitespace-nowrap" data-i18n="tabAll">
           All Scents
@@ -248,6 +248,9 @@
         </button>
         <button data-status="Decants" class="status-tab px-4 py-2 rounded-full text-xs font-medium bg-obsidian-surface/60 text-zinc-300 border border-gold/25 hover:border-gold/60 transition whitespace-nowrap" data-i18n="tabDecants">
           Decants
+        </button>
+        <button data-status="Vials" class="status-tab px-4 py-2 rounded-full text-xs font-medium bg-obsidian-surface/60 text-zinc-300 border border-gold/25 hover:border-gold/60 transition whitespace-nowrap" data-i18n="tabVials">
+          Vials (1.5-2ml)
         </button>
         <button data-status="Pre-Order" class="status-tab px-4 py-2 rounded-full text-xs font-medium bg-obsidian-surface/60 text-zinc-300 border border-gold/25 hover:border-gold/60 transition whitespace-nowrap" data-i18n="tabPreOrder">
           Pre-Order
@@ -321,7 +324,7 @@
           <span class="font-serif text-lg text-gold font-semibold">Billion</span>
           <span class="font-serif text-lg text-gold-champagne font-semibold"> Fragrance House</span>
         </div>
-        <p class="text-zinc-400 mt-1" data-i18n="footerTagline">Authentic Perfumes &amp; Hand-Decanted Samples</p>
+        <p class="text-zinc-400 mt-1" data-i18n="footerTagline">Authentic Perfumes, Vials &amp; Hand-Decanted Samples</p>
       </div>
 
       <!-- Location & Phone Number -->
@@ -466,12 +469,12 @@
 
     const i18n = {
       en: {
-        topBanner: "100% Authentic Niche & Designer Fragrances • In-Stock, Decants & Pre-Order",
-        brandSub: "Luxury Perfumes • Decants • Pre-Order",
+        topBanner: "100% Authentic Niche & Designer Fragrances • In-Stock, Vials, Decants & Pre-Order",
+        brandSub: "Luxury Perfumes • Vials • Decants • Pre-Order",
         contactAdmin: "Telegram Admin",
         heroBadge: "Curated Scent Showroom",
         heroTitle: "Discover Your Signature Scent",
-        heroSubtitle: "Explore ready-to-ship full bottles, hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.",
+        heroSubtitle: "Explore ready-to-ship full bottles, official vials (1.5ml–2ml), hand-decanted samples (3ml, 5ml, 10ml, 30ml), and international pre-orders. Tap any fragrance to view notes and order directly via Telegram.",
         channelVipBadge: "Official Telegram Channel",
         channelCardDesc: "Join our Telegram Channel (@debillionaires) for exclusive pre-order prices, limited deals, and daily stock arrivals.",
         joinChannelBtn: "Join Channel (@debillionaires)",
@@ -487,11 +490,12 @@
         tabAll: "All Scents",
         tabInStock: "In-Stock",
         tabDecants: "Decants",
+        tabVials: "Vials (1.5-2ml)",
         tabPreOrder: "Pre-Order",
         searchPlaceholder: "Search brand, perfume, notes...",
         noResultsTitle: "No fragrances found",
         noResultsSub: "Try clearing your search or switching category filters.",
-        footerTagline: "Authentic Perfumes & Hand-Decanted Samples",
+        footerTagline: "Authentic Perfumes, Vials & Hand-Decanted Samples",
         modalBackBtn: "Back",
         notesLabel: "Key Scent Notes",
         selectSizeLabel: "Select Size / Option",
@@ -500,12 +504,12 @@
         viewDetails: "View & Order"
       },
       mm: {
-        topBanner: "၁၀၀% စစ်မှန်သော Niche & Designer ရေမွှေးများ • In-Stock, Decants နှင့် Pre-Order",
-        brandSub: "စစ်မှန်သော ရေမွှေး • Decants • Pre-Order",
+        topBanner: "၁၀၀% စစ်မှန်သော Niche & Designer ရေမွှေးများ • In-Stock, Vials, Decants နှင့် Pre-Order",
+        brandSub: "စစ်မှန်သော ရေမွှေး • Vials • Decants • Pre-Order",
         contactAdmin: "Telegram ဆက်သွယ်ရန်",
         heroBadge: "Luxury Perfume Showroom",
         heroTitle: "သင့်အတွက် အလိုက်ဖက်ဆုံး ရနံ့ကို ရှာဖွေပါ",
-        heroSubtitle: "အသင့်ဝယ်ယူနိုင်သော Full Size များ၊ Decant (3ml, 5ml, 10ml, 30ml) များနှင့် နိုင်ငံတကာ Pre-Order ရေမွှေးများကို ကြည့်ရှုပြီး Telegram မှတစ်ဆင့် တိုက်ရိုက်မှာယူနိုင်ပါသည်။",
+        heroSubtitle: "အသင့်ဝယ်ယူနိုင်သော Full Size များ၊ Official Vial (1.5ml–2ml) များ၊ Decant (3ml, 5ml, 10ml, 30ml) များနှင့် နိုင်ငံတကာ Pre-Order ရေမွှေးများကို ကြည့်ရှုပြီး Telegram မှတစ်ဆင့် တိုက်ရိုက်မှာယူနိုင်ပါသည်။",
         channelVipBadge: "Official Telegram Channel",
         channelCardDesc: "Pre-Order အထူးဈေးနှုန်းများ၊ Batch ပိတ်ရက်နှင့် နေ့စဉ် Update များကို @debillionaires Channel တွင် ဝင်ရောက်ကြည့်ရှုနိုင်ပါသည်။",
         joinChannelBtn: "Channel သို့ ဝင်ရောက်ရန် (@debillionaires)",
@@ -521,11 +525,12 @@
         tabAll: "အားလုံး",
         tabInStock: "In-Stock (အသင့်ရှိ)",
         tabDecants: "Decants (ခွဲရောင်း)",
+        tabVials: "Vials (1.5-2ml)",
         tabPreOrder: "Pre-Order (မှာယူရန်)",
         searchPlaceholder: "Brand၊ ရေမွှေးနာမည်၊ ရနံ့ ရှာရန်...",
         noResultsTitle: "ရေမွှေး ရှာမတွေ့ပါ",
         noResultsSub: "ရှာဖွေမှု စာသားကို ပြန်ပြင်ကြည့်ပါ သို့မဟုတ် အမျိုးအစား ပြောင်းရွေးကြည့်ပါ။",
-        footerTagline: "စစ်မှန်သော ရေမွှေးနှင့် Decant များ ရောင်းဝယ်ရေး",
+        footerTagline: "စစ်မှန်သော ရေမွှေး၊ Vial နှင့် Decant များ ရောင်းဝယ်ရေး",
         modalBackBtn: "နောက်သို့",
         notesLabel: "ပါဝင်သော ရနံ့များ (Notes)",
         selectSizeLabel: "Size ရွေးချယ်ပါ",
@@ -670,15 +675,44 @@
       return String(raw).trim();
     }
 
+    function isVialColumn(normHeader) {
+      return normHeader.includes('vial') ||
+        normHeader.includes('1.5ml') ||
+        normHeader.includes('2ml') ||
+        normHeader.includes('1.5_2ml') ||
+        normHeader.includes('1.5-2ml');
+    }
+
+    function isVialItem(item) {
+      const s = (item.status || '').toLowerCase().replace(/[\s\-_]/g, '');
+      if (s.includes('vial')) return true;
+      // Also treat as separate Vial item if it only has vial pricing options
+      if (item.options && item.options.length > 0 && item.options.every(o => o.isVial)) {
+        return true;
+      }
+      return false;
+    }
+
     function formatSizeLabel(rawHeader, status) {
       const clean = rawHeader.toLowerCase().replace(/^price[_\s-]*/, '').replace(/[\s_-]+/g, '');
-      const isPreOrder = (status || '').toLowerCase().includes('pre');
+      const statusLower = (status || '').toLowerCase();
+      const isPreOrder = statusLower.includes('pre');
+      const isVialStatus = statusLower.includes('vial');
 
       if (clean.startsWith('full') || clean === 'bottle') {
+        if (isVialStatus) return 'Vial (1.5-2ml)';
         return isPreOrder ? 'Full Size (Pre-Order)' : 'Full Size';
+      }
+      if (clean.includes('vial')) {
+        const vialMl = clean.match(/(\d+(?:\.\d+)?ml)/);
+        return vialMl ? `${vialMl[1]} Vial` : 'Vial (1.5-2ml)';
       }
       const mlMatch = clean.match(/(\d+(?:\.\d+)?ml)/);
       if (mlMatch) {
+        const numVal = parseFloat(mlMatch[1]);
+        if (numVal > 0 && numVal <= 2.5) {
+          return mlMatch[1] + ' Vial';
+        }
         return mlMatch[1] + ' Decant';
       }
       const pretty = rawHeader
@@ -694,6 +728,7 @@
     function getStatusBadgeStyle(status) {
       const s = (status || '').toLowerCase().replace(/[\s\-_]/g, '');
       if (s.includes('stock')) return 'bg-emerald-950/90 text-emerald-300 border border-emerald-500/40';
+      if (s.includes('vial')) return 'bg-indigo-950/90 text-indigo-200 border border-indigo-400/40';
       if (s.includes('decant')) return 'bg-amber-950/90 text-gold-champagne border border-gold/50';
       if (s.includes('pre')) return 'bg-crimson-deep/95 text-rose-200 border border-crimson-bright/50';
       return 'bg-zinc-900/90 text-zinc-300 border border-zinc-700';
@@ -845,10 +880,13 @@
             if (rawVal && rawVal.trim() !== '' && rawVal.trim() !== '-') {
               const formatted = formatPrice(rawVal);
               if (formatted) {
+                const vialFlag = isVialColumn(col.normHeader) || statusVal.toLowerCase().includes('vial');
+                const decantFlag = !vialFlag && ((col.normHeader.includes('ml') && !col.normHeader.includes('full')) || col.normHeader.includes('decant'));
                 options.push({
                   label: formatSizeLabel(col.rawHeader, statusVal),
                   price: formatted,
-                  isDecant: (col.normHeader.includes('ml') && !col.normHeader.includes('full')) || col.normHeader.includes('decant')
+                  isVial: vialFlag,
+                  isDecant: decantFlag
                 });
               }
             }
@@ -902,7 +940,7 @@
     }
 
     async function loadCatalog() {
-      const CACHE_KEY = 'bfh_catalog_csv_v2';
+      const CACHE_KEY = 'bfh_catalog_csv_v4';
       let renderedFromCache = false;
 
       try {
@@ -932,7 +970,13 @@
 
     function buildFamilyFilters() {
       const container = document.getElementById('familyFilters');
-      const families = ['All', ...new Set(allFragrances.map(f => f.family).filter(Boolean))];
+      const pool = activeStatus === 'Vials'
+        ? allFragrances.filter(isVialItem)
+        : allFragrances.filter(item => !isVialItem(item));
+      const families = ['All', ...new Set(pool.map(f => f.family).filter(Boolean))];
+      if (!families.includes(activeFamily)) {
+        activeFamily = 'All';
+      }
       container.innerHTML = families.map(fam => `
         <button onclick="selectFamily('${fam.replace(/'/g, "\\'")}')"
                 class="family-pill px-3 py-1 rounded-full text-[11px] border transition whitespace-nowrap ${
@@ -952,6 +996,16 @@
     }
 
     function matchesStatusFilter(item, tabStatus) {
+      const vialItem = isVialItem(item);
+
+      // Vials are kept strictly separate in their own Vials (1.5-2ml) tab
+      if (tabStatus === 'Vials') {
+        return vialItem;
+      }
+      if (vialItem) {
+        return false;
+      }
+
       if (tabStatus === 'All') return true;
       const norm = (item.status || '').toLowerCase().replace(/[\s\-_]/g, '');
       if (tabStatus === 'In-Stock') {
@@ -993,7 +1047,10 @@
 
       const grid = document.getElementById('catalogGrid');
       const empty = document.getElementById('emptyState');
-      document.getElementById('resultCount').textContent = `${filtered.length} fragrance${filtered.length === 1 ? '' : 's'}`;
+      const unitLabel = activeStatus === 'Vials'
+        ? (filtered.length === 1 ? 'vial' : 'vials')
+        : (filtered.length === 1 ? 'fragrance' : 'fragrances');
+      document.getElementById('resultCount').textContent = `${filtered.length} ${unitLabel}`;
 
       if (filtered.length === 0) {
         grid.innerHTML = '';
@@ -1219,6 +1276,7 @@
         });
         btn.className = 'status-tab active px-4 py-2 rounded-full text-xs font-semibold bg-gold text-obsidian border border-gold transition whitespace-nowrap';
         activeStatus = btn.getAttribute('data-status');
+        buildFamilyFilters();
         renderCatalog();
       });
     });
